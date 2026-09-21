@@ -23,3 +23,6 @@ commit & push。
 - **delegate-codex** — 設計→Codex 実装→レビューの委譲フロー(worktree 隔離)。
   前提: [claude-code-herdr-plugin](https://github.com/yigitkonur/claude-code-herdr-plugin)
   がインストール済みで、herdr server が起動していること。
+- **delegate-muse** — 設計→Muse(Muse Code)実装→レビューの委譲フロー(worktree 隔離)。
+  Muse は herdr ペインで動き、ターンの終わりは Muse のセッションログで判定する。
+  前提: herdr 0.9.1 以上のペイン内で Claude Code が動いていること、`muse` がログイン済みであること。
