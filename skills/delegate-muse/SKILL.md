@@ -27,8 +27,11 @@ muse --version                              # Muse Code 1.3.0 で実測
 - Claude Code がherdrペインの外で動いていたら(`HERDR_ENV` 未設定)、implement.sh は拒否する。
   ユーザーにherdr内でClaude Codeを起動し直して会話を再開してもらう。
 - Museが未ログインなら起動・ターンが失敗する。ユーザーに `! muse login` を頼む。
-- モデルと reasoning effort は `~/.config/muse/settings.json` の既定。変える時だけ
-  implement.sh に環境変数 `DELEGATE_MUSE_EFFORT` / `DELEGATE_MUSE_MODEL` を付ける(委譲ごとに固定)。
+- reasoning effort は **常に `max` で起動する**(owner指定、2026-09-21)。モデルは `~/.config/muse/settings.json` の既定。
+  変える時だけ implement.sh に環境変数 `DELEGATE_MUSE_EFFORT` / `DELEGATE_MUSE_MODEL` を付ける(委譲ごとに固定)。
+  **注意: Muse は最後に起動した effort を settings.json に保存する**ので、`DELEGATE_MUSE_EFFORT=low` で
+  起動すると、ユーザーが手で起動する `muse` の既定も low になる。テスト目的で下げた時は最後に
+  max で1回起動して戻すか、`settings.json` の `reasoning_effort` を確認する。
 
 ## 手順(この順番を崩さない)
 

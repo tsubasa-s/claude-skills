@@ -13,7 +13,7 @@
 # nothing is sent yet. Prints ONE JSON object:
 #   {agent, pane, branch, worktree, state_dir, next}
 # Run .next (turn.sh <slug>) with the Bash tool's run_in_background: true.
-# Optional env: DELEGATE_MUSE_EFFORT (reasoning effort), DELEGATE_MUSE_MODEL.
+# Optional env: DELEGATE_MUSE_EFFORT (reasoning effort, default max), DELEGATE_MUSE_MODEL.
 set -euo pipefail
 
 die() { echo "implement.sh: $*" >&2; exit 2; }
@@ -83,8 +83,10 @@ esac
 
 # --trust-workspace: load the worktree's AGENTS.md (skipped with a warning otherwise) and
 # skip the first-launch trust dialog. Approval and the sandbox stay at their defaults.
-args=(--trust-workspace)
-[[ -z ${DELEGATE_MUSE_EFFORT:-} ]] || args+=(--reasoning-effort "$DELEGATE_MUSE_EFFORT")
+# Effort is always passed explicitly (max unless overridden): Muse persists the last
+# effort it was launched with into ~/.config/muse/settings.json, so relying on that
+# file would let one low-effort run change every later launch.
+args=(--trust-workspace --reasoning-effort "${DELEGATE_MUSE_EFFORT:-max}")
 [[ -z ${DELEGATE_MUSE_MODEL:-} ]]  || args+=(--model "$DELEGATE_MUSE_MODEL")
 if ! out=$(herdr agent start "$agent" --kind muse --pane "$pane" --timeout 60000 -- "${args[@]}" 2>&1); then
   undo; die "herdr agent start failed: $out"
